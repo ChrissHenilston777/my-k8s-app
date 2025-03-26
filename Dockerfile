@@ -1,23 +1,20 @@
-# Use an official Python base image
-FROM python:3.10-slim
+# Use Python 3.11 as the base image
+FROM python:3.11  
 
-# Set environment variables to avoid buffering issues
-ENV PYTHONUNBUFFERED=1
+# Set the working directory in the container
+WORKDIR /app  
 
-# Set working directory inside the container
-WORKDIR /app
-
-# Copy requirements file first (to leverage Docker caching)
-COPY requirements.txt .
+# Copy the requirements file to the container
+COPY requirements.txt .  
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt  
 
-# Copy the rest of the application files
-COPY . .
+# Copy the application files to the container
+COPY . .  
 
-# Expose the necessary port (change if your app runs on a different port)
-EXPOSE 8080
+# Expose the port (if your app runs on a specific port, change it accordingly)
+EXPOSE 5000  
 
-# Define the default command
-CMD ["python", "main.py"]
+# Define the command to run the application
+CMD ["python", "app.py"]

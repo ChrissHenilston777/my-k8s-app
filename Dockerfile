@@ -1,18 +1,23 @@
-# Use an official base image
-FROM node:18
+# Use an official Python base image
+FROM python:3.10-slim
 
-# Set working directory
+# Set environment variables to avoid buffering issues
+ENV PYTHONUNBUFFERED=1
+
+# Set working directory inside the container
 WORKDIR /app
 
-# Copy package.json and install dependencies
-COPY package.json ./
-RUN npm install
+# Copy requirements file first (to leverage Docker caching)
+COPY requirements.txt .
 
-# Copy application code
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the rest of the application files
 COPY . .
 
-# Expose port
-EXPOSE 3000
+# Expose the necessary port (change if your app runs on a different port)
+EXPOSE 8080
 
-# Run the app
-CMD ["node", "server.js"]
+# Define the default command
+CMD ["python", "main.py"]
